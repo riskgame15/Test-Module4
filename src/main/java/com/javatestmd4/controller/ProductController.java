@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/product")
 public class ProductController {
@@ -20,6 +21,7 @@ public class ProductController {
 
     @Autowired
     private IProductTypeService productTypeService;
+
 
     @GetMapping
     public ModelAndView index() {
@@ -58,7 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ModelAndView delete(List<Long> idList) {
+    public ModelAndView delete(@RequestBody List<Long> idList) {
         ModelAndView mv = new ModelAndView("index");
         for (Long id : idList) {
             productService.delete(productService.findById(id).get());

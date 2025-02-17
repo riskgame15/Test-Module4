@@ -17,7 +17,10 @@ public class ProductService implements IProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
-
+    @Override
+    public List<Product> findByProductType(Long typeId) {
+        return productRepository.findByProductTypeId(typeId); // Truy vấn theo loại
+    }
     @Override
     public Optional<Product> findById(Long id) {
         return productRepository.findById(id);

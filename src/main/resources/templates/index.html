@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,26 +16,25 @@
         </button>
     </div>
 
-    <form class="row mb-3">
+    <form class="row mb-3" method="get" th:action="@{/product}">
         <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Nhập tên"/>
+            <input type="text" class="form-control" placeholder="Nhập tên" name="name"/>
         </div>
         <div class="col-md-3">
-            <input type="number" class="form-control" placeholder="Giá từ"/>
+            <input type="number" class="form-control" placeholder="Giá từ" name="priceFrom"/>
         </div>
         <div class="col-md-3">
-            <select class="form-select" name="type">
+            <select class="form-select" name="type" onchange="this.form.submit()">
                 <option value="">--Loại Sản Phẩm--</option>
                 <option
                         th:each="pt : ${productTypeList}"
                         th:value="${pt.id}"
                         th:text="${pt.name}"
-                        th:selected="${pt.id == param.type}"
-                ></option>
+                        th:selected="${pt.id == selectedType}"></option>
             </select>
         </div>
         <div class="col-md-3 d-flex gap-2">
-            <button class="btn btn-secondary" type="reset">Reset</button>
+            <button class="btn btn-secondary" type="reset" href="/product" >Reset</button>
             <button class="btn btn-success" type="submit">Tìm</button>
         </div>
     </form>
@@ -57,11 +55,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product,status : ${productList}">
+        <tr th:each="product, status : ${productList}">
             <th scope="row" th:text="${status.count}"></th>
             <td>
-                <input class="product-checkbox" type="checkbox"
-                       name="selectedProducts" th:value="${product.id}" />
+                <input class="product-checkbox" type="checkbox" name="selectedProducts" th:value="${product.id}" />
             </td>
             <td th:text="${product.name}"></td>
             <td th:text="${product.startingPrice}"></td>
@@ -111,6 +108,7 @@
             cb.checked = selectAllCheckbox.checked;
         }
     }
+
     function deleteProduct() {
         let idList = [];
         let productCheckboxes = document.getElementsByClassName('product-checkbox');
@@ -122,12 +120,17 @@
         $.ajax({
             url: `http://localhost:8080/product`,
             type: `DELETE`,
-            data: idList,
+            contentType: 'application/json',
+            data: JSON.stringify(idList),
             success: function () {
                 location.reload();
+            },
+            error: function () {
+                alert('Có lỗi xảy ra khi xóa sản phẩm');
             }
         })
     }
 </script>
+
 </body>
 </html>
